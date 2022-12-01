@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <title>THIS IS FRANK COSTANZA</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    </head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+            font-family: 'Playfair Display', serif;
+        }
+        .animated {
+            position: absolute;
+            width: 300px;
+            top: 0;
+            left: 0;
+            text-align: center;
+            background: #ffffff;
+            color: #000;
+            padding: 10px;
+            margin: 0;
+        }
+        #quote-box {
+            padding: 10px;
+            font-size: 1.5rem;
+            line-height: 1.75rem;
+            text-align: center;
+        }
+    </style>
+    <body>
+        <div class="animated" id="animated">
+            <img src="./delbocavista.jpg" width="160" height="90">
+            <div id="quote-box"></div>
+        </div>
+    </body>
+    <script>
+        const Frank = class {
+            constructor() {
+                // DOM params.
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+
+                // Elements in use.
+                this.animated = document.getElementById('animated');
+                this.quoteBox = document.getElementById('quote-box');
+                
+                // Config.
+                this.pos = {
+                    x: 0,
+                    y: 0
+                }
+                this.dir = {
+                    x: 'forward',
+                    y: 'down'
+                }
+
+                this.timer = 10;
+                this.quotes = [
+                    'Serenity now!',
+                    'That\s Why I Could Never Become President. That\'s Also Why, From An Early Age, I Never Had Any Interest In Politics. I Refuse To Vote. They Don\'t Want Me, I Don\'t Want Them!',
+                    'No one is touching my feet. Between you and me, Elaine, I think I\'ve got a foot odor problem.',
+                    'The tradition of festivus begins with the airing of grievances. I\'ve got a lot of problems with you people, and now, you\'re gonna hear about it!',
+                    'You\'re not the only one improving yourself. I worked out with a dumbbell yesterday. I feel vigoroussss',
+                    'Your Meatloaf Is Mushy, Your Salmon Croquettes Are Oily, And Your Eggplant Parmesan Is A Disgrace To This House!',
+                    'You have no eye for fashion!',
+                    'I Was Watching A Provocative Movie On Cable TV Called "The Net", starring That Woman From "The Bus."',
+                    'ARE YOU TRYING TO KEEP US OUT OF DEL BOCA VISTA?',
+                    'How long it takes to find a bra? What\'s going on in there? You ask me to get a pair of underwear, I\'m back in two seconds',
+                    'He stopped short? That\'s my move. I\'m gonna kill him!',
+                    'This is Frank Costanza. You think you can keep us out of Florida? We\'re moving in lock, stock and barrel. We\'re gonna be in the pool. We\'re gonna be in the clubhouse. We\'re gonna be all over that shuffleboard court. And I dare you to keep me out!'
+                ];
+
+                // Set initial values.
+                this.#setBackground();
+            }
+
+            // Run the loop.
+            serenityNow = () => {
+                setInterval(() => {
+                    // Check x boundaries.
+                    console.log(this.animated.clientWidth)
+                    if (this.pos.x >= this.width - this.animated.clientWidth) {
+                        console.log('Pos X reached right limit, switching direction.');
+                        this.dir.x = 'backward';
+                        this.pos.x--;
+                        this.#setBackground();
+                        this.#setQuote();
+                        
+                    } else if (this.pos.x <= 0) {
+                        console.log('Pos X reached left limit, switching direction.');
+                        this.dir.x = 'forward';
+                        this.pos.x++;
+                        this.#setBackground();
+                        this.#setQuote();
+                    } else {
+                        this.pos.x = this.dir.x === 'forward' ? this.pos.x + 1 : this.pos.x - 1;
+                    }
+
+                    // Check y boundaries.
+                    if (this.pos.y >= this.height - this.animated.clientHeight) {
+                        console.log('Pos Y reached bottom limit, switching direction.');
+                        this.dir.y = 'up';
+                        this.pos.y--;
+                        this.#setBackground();
+                        this.#setQuote();
+                    } else if (this.pos.y <= 0) {
+                        console.log('Pos Y reached upper limit, switching direction.');
+                        this.dir.y = 'down';
+                        this.pos.y++;
+                        this.#setBackground();
+                        this.#setQuote();
+                    } else {
+                        this.pos.y = this.dir.y === 'down' ? this.pos.y + 1 : this.pos.y - 1;
+                    }
+
+                    // Move the thing.
+                    this.animated.style.top = this.pos.y;
+                    this.animated.style.left = this.pos.x;
+                    
+                }, this.timer);
+            }
+
+            // Set random background.
+            #setBackground = () => {
+                document.body.style.background = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+            }
+
+            // Pick random quote.
+            #setQuote = () => {
+                this.quoteBox.innerHTML = this.quotes[Math.floor(Math.random() * this.quotes.length)];
+            }
+        };
+
+        const frank = new Frank;
+        frank.serenityNow();
+    </script>
+</html>
